@@ -2,15 +2,19 @@ require('dotenv').config();
 
 const express = require('express');
 const app = express();
+const cors = require('cors');
+app.use(cors());
 const mongoose = require('mongoose');
 
 const User = require('./models/user');
-const mockUsers = require('./mock/users');
+const mockData = require('./mock/mock-data');
 
-const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_URI}`;
-console.log(dbURI);
+// const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_URI}`;
+const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@api-test.a0bl4dg.mongodb.net/?retryWrites=true&w=majority&appName=API-test`
+const dbURILocal = `mongodb://localhost:27017/API-test`
+console.log(dbURILocal);
 
-mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(dbURILocal, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((result) => {
         console.log('connected to db');
         app.listen(3000);
@@ -35,12 +39,14 @@ app.get('/add-user', (req, res) => {
         .catch((err) => console.log(err));
 });
 
-app.get('/add-users', (req, res) => {
-    mockUsers.forEach((user) => {
+app.get('/add-mock-users', (req, res) => {
+    mockData.mockUsers.forEach((user) => {
         user.save()
-            .then((result) => res.send(result))
+            .then((result) => console.log(result))
             .catch((err) => console.log(err));
-    });
+    })
+    .then(() => res.send(mockUsers))
+    .catch((err) => console.log(err));
 });
 
 app.get('/users', (req, res) => {
@@ -59,12 +65,26 @@ app.get('/users/:id', (req, res) => {
         });
 });
 
-app.use((req, res)=>{
-    console.log("USE");
+app.post('/users', (req, res) => {
+    const user = new User(req.body);
+    user.save()
+    .then((result) => res.send(result))
+    .catch((err) => console.log(err));
 });
 
 app.delete('/users/:id', (req, res) => {
     User.findByIdAndDelete(req.params.id)
-        .then((result) => res.send(result))
-        .catch((err) => console.log(err));
+    .then((result) => res.send(result))
+    .catch((err) => console.log(err));
+});
+
+app.get('/users/:id/delete', (req, res) => {
+    User.findByIdAndDelete(req.params.id)
+    .then((result) => res.send(result))
+    .catch((err) => console.log(err));
+});
+
+// 404
+app.use((req, res)=>{
+    res.send('404 page not found');
 });
