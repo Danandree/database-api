@@ -26,7 +26,7 @@ const user_detail = (req, res) => {
 const user_create_post = (req, res) => {
     const user = new User(req.body.user);
     user.save()
-        .then((result) => res.send(result))
+        .then((result) => res.status(201).send(result))
         .catch((err) => console.log(err));
 }
 
@@ -50,9 +50,28 @@ const user_delete = (req, res) => {
 
 }
 
+const user_update = (req, res) => {
+    User.findByIdAndUpdate(req.params.id, req.body.user)
+        .then((result) => {
+            if (result) {
+                res.send(result);
+            }
+            else {
+                res.status(404).send(`User with id "${req.params.id.toString()}"  not found`);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            if (err.kind == 'ObjectId') {
+                res.status(404).send(`User id "${req.params.id.toString()}"  not valid`);
+            }
+        });
+}
+
 module.exports = {
     user_index,
     user_detail,
     user_create_post,
     user_delete,
+    user_update,
 }

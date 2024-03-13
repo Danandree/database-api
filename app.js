@@ -1,7 +1,8 @@
 require('dotenv').config();
-const ejs = require('ejs');
 
 const userRoutes = require('./routes/userRoutes');
+const postRoutes = require('./routes/postRoutes');
+const interactionRoutes = require('./routes/interactionRoutes');
 
 const express = require('express');
 const app = express();
@@ -9,32 +10,40 @@ const cors = require('cors');
 app.use(cors());
 const mongoose = require('mongoose');
 
-const mockData = require('./mock/mock-data');
-
-// const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_URI}`;
-const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@api-test.a0bl4dg.mongodb.net/?retryWrites=true&w=majority&appName=API-test`
-const dbURILocal = `mongodb://localhost:27017/API-test`
+const dbURI =  process.env.DB_URI;
+const PORT = process.env.PORT || 3000;
+const urlToServer = "http://localhost:3000";
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
 
-mongoose.connect(dbURILocal, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((result) => {
         console.log('connected to db');
-        app.listen(3000);
+        app.listen(PORT, ["127.0.0.1"], () => console.log(`server running on port ${PORT}`));
     })
     .catch((err) => console.log(err));
 
+// app.use((req,res)=>{
+//     console.log(req);
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
+//     res.setHeader('Access-Control-Allow-Methods', 'Content-Type', 'Authorization');
+// });
 
 app.get('/', (req, res) => {
-    // res.send();
-    res.render('index');
-    console.log(req);
+    res.render('index',{urlToServer});
 });
 
 // USER ROUTES
 app.use(`/users`, userRoutes);
+
+// POST ROUTES
+app.use(`/posts`, postRoutes);
+
+// INTERACTION ROUTES
+// app.use(`/interactions`, interactionRoutes);
 
 
 // 404

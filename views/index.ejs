@@ -11,11 +11,28 @@
         <p>This is a test API</p>
         <h3>USER:</h3>
         <ul>
-            <li>GET http://localhost:3000/users - get all users</li>
-            <li>GET http://localhost:3000/users/:id - get user by id</li>
-            <li>POST http://localhost:3000/users - post new user</li>
-            <li>DELETE http://localhost:3000/users/:id - delete user by id</li>
-            <li>PUT | PATCH http://localhost:3000/users/:id - update user by id</li>
+            <li>GET <%= urlToServer %>/users - get all users</li>
+            <li>POST <%= urlToServer %>/users - create new user</li>
+            <li>GET <%= urlToServer %>/users/:id - get user by id</li>
+            <li>DELETE <%= urlToServer %>/users/:id - delete user by id</li>
+            <li>PUT | PATCH <%= urlToServer %>/users/:id - update user by id</li>
+        </ul>
+        <h3>POSTS:</h3>
+        <ul>
+            <li>GET <%= urlToServer %>/posts - get all posts</li>
+            <li>POST <%= urlToServer %>/posts - create new post</li>
+            <li>GET <%= urlToServer %>/posts/:id - get post by id</li>
+            <li>DELETE <%= urlToServer %>/posts/:id - delete post by id</li>
+            <li>PUT | PATCH <%= urlToServer %>/posts/:id - update post by id</li>
+            <li>GET <%= urlToServer %>/posts/:id/interaction - get interactions' post by post id</li>
+        </ul>
+        <h3>INTERACTIONS:</h3>
+        <ul>
+            <li>GET <%= urlToServer %>/posts/:id/interaction - get interaction by post id</li>
+            <li>POST <%= urlToServer %>/posts/:id/interaction - create new interaction</li>
+            <li>DELETE <%= urlToServer %>/posts/:id/interaction/:interactionID - delete interaction by post and interaction id</li>
+            <li>PUT | PATCH <%= urlToServer %>/posts/:id/interaction/:interactionID - update interaction by post and interaction id</li>
+
         </ul>
     </div>
 </body>
