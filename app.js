@@ -21,30 +21,16 @@ app.set('view engine', 'ejs');
 mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((result) => {
         console.log('connected to db');
-        app.listen(PORT, ["127.0.0.1"], () => console.log(`server running on port ${PORT}`));
+        app.listen(PORT, () => console.log(`server running on port ${PORT}`));
     })
     .catch((err) => console.log(err));
-
-// app.use((req,res)=>{
-//     console.log(req);
-//     res.setHeader('Access-Control-Allow-Origin', '*');
-//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE');
-//     res.setHeader('Access-Control-Allow-Methods', 'Content-Type', 'Authorization');
-// });
 
 app.get('/', (req, res) => {
     res.render('index',{urlToServer});
 });
 
-// USER ROUTES
 app.use(`/users`, userRoutes);
-
-// POST ROUTES
 app.use(`/posts`, postRoutes);
-
-// INTERACTION ROUTES
-// app.use(`/interactions`, interactionRoutes);
-
 
 // 404
 app.use((req, res) => {
