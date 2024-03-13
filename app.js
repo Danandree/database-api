@@ -12,7 +12,9 @@ const mockData = require('./mock/mock-data');
 // const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@${process.env.DB_URI}`;
 const dbURI = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@api-test.a0bl4dg.mongodb.net/?retryWrites=true&w=majority&appName=API-test`
 const dbURILocal = `mongodb://localhost:27017/API-test`
-console.log(dbURILocal);
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 mongoose.connect(dbURILocal, { useNewUrlParser: true, useUnifiedTopology: true })
     .then((result) => {
@@ -45,8 +47,8 @@ app.get('/add-mock-users', (req, res) => {
             .then((result) => console.log(result))
             .catch((err) => console.log(err));
     })
-    .then(() => res.send(mockUsers))
-    .catch((err) => console.log(err));
+        .then(() => res.send(mockUsers))
+        .catch((err) => console.log(err));
 });
 
 app.get('/users', (req, res) => {
@@ -57,34 +59,46 @@ app.get('/users', (req, res) => {
 
 app.get('/users/:id', (req, res) => {
     User.findById(req.params.id)
-        .then((result) => res.send(result))
+        .then((result) => {
+            if (result) { res.send(result); }
+            else { res.status(404).send(`User id "${req.params.id.toString()}" doesn't exists`); }
+        })
         .catch((err) => {
-            console.log(err); 
+            console.log(err);
             // res.send(err);
-            res.send(req.params.id.toString(), " not found");
+            if (err.kind == 'ObjectId') {
+                res.status(404).send(`User id "${req.params.id.toString()}"  not valid`);
+            }
         });
 });
 
 app.post('/users', (req, res) => {
-    const user = new User(req.body);
+    const user = new User(req.body.user);
     user.save()
-    .then((result) => res.send(result))
-    .catch((err) => console.log(err));
+        .then((result) => res.send(result))
+        .catch((err) => console.log(err));
 });
 
 app.delete('/users/:id', (req, res) => {
+    console.log(req.params.id, "REQ PARAMS ID");
     User.findByIdAndDelete(req.params.id)
-    .then((result) => res.send(result))
-    .catch((err) => console.log(err));
-});
-
-app.get('/users/:id/delete', (req, res) => {
-    User.findByIdAndDelete(req.params.id)
-    .then((result) => res.send(result))
-    .catch((err) => console.log(err));
+        .then((result) => {
+            if (result) {
+                res.send(result);
+            }
+            else {
+                res.status(404).send(`User with id "${req.params.id.toString()}"  not found`);
+            }
+        })
+        .catch((err) => {
+            console.log(err);
+            if (err.kind == 'ObjectId') {
+                res.status(404).send(`User id "${req.params.id.toString()}"  not valid`);
+            }
+        });
 });
 
 // 404
-app.use((req, res)=>{
-    res.send('404 page not found');
+app.use((req, res) => {
+    res.status(404).send('404 page not found');
 });
