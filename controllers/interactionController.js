@@ -4,7 +4,7 @@ const interaction_index = (req, res) => {
     const post_id = req.baseUrl.split("/")[2];
     console.log(post_id, "POST ID");
     Interaction.find({ post_id: post_id })
-        .then((result) => {res.send(result);console.log(result, "RESULT")})
+        .then((result) => res.send(result))
         .catch((err) => console.log(err));
 }
 
@@ -18,23 +18,17 @@ const interaction_post = (req, res) => {
 const interaction_delete = (req, res) => {
     Interaction.findByIdAndDelete(req.params.id)
         .then((result) => {
-            if (result) {
-                res.send(result);
-            }
-            else {
-                res.status(404).send(`Interaction with id "${req.params.id.toString()}"  not found`);
-            }
+            if (result) { res.send(result); }
+            else { res.status(404).send(`Interaction with id "${req.params.id.toString()}"  not found`); }
         })
         .catch((err) => {
             console.log(err);
-            if (err.kind == 'ObjectId') {
-                res.status(404).send(`Interaction id "${req.params.id.toString()}"  not valid`);
-            }
+            if (err.kind == 'ObjectId') { res.status(404).send(`Interaction id "${req.params.id.toString()}"  not valid`); }
         });
 }
 
-module.exports = { 
-    interaction_post, 
+module.exports = {
+    interaction_post,
     interaction_index,
     interaction_delete,
- }
+}

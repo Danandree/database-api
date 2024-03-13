@@ -1,8 +1,6 @@
 // user_index, user_detail, user_create_get, user_create_post, user_delete
 const User = require('../models/user');
 
-
-// list??
 const user_index = (req, res) => {
     User.find()
         .then((result) => res.send(result))

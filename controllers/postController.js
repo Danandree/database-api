@@ -15,7 +15,7 @@ const post_detail = (req, res) => {
         .catch((err) => {
             console.log(err);
             if (err.kind == 'ObjectId') {
-                res.status(404).send(`Post id "${req.params.id.toString()}"  not valid`);
+                res.status(404).send(`Post id "${req.params.id.toString()}" not valid`);
             }
         });
 }
@@ -64,10 +64,22 @@ const post_update = (req, res) => {
         });
 }
 
+const post_by_date = (req, res) => {
+    let date = new Date(req.params.date);
+    let newDate = new Date(req.params.date);
+    newDate.setDate(newDate.getDate() + 1);
+    console.log(date, "NEW DATE");
+    console.log(newDate, "NEW DATE");
+    Post.find({ createdAt: { $gte: date, $lt: newDate } })
+        .then((result) => res.send(result))
+        .catch((err) => console.log(err));
+}
+
 module.exports = {
     post_index,
     post_detail,
     post_create_post,
     post_delete,
     post_update,
+    post_by_date,
 }
