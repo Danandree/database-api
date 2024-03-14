@@ -15,8 +15,6 @@ router.get('/date/:date', postController.post_by_date);
 // router.get('/:year/:month/:day', postController.post_by_date); <-- check
 
 // INTERACTION ROUTES
-// router.route('/:id/interaction').all(interactionRoutes);
 router.use('/:id/interactions', interactionRoutes);
-// router.use('/interaction', interactionRoutes);
 
 module.exports = router;
