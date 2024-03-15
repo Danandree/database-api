@@ -16,7 +16,7 @@ const user_detail = (req, res) => {
         .catch((err) => {
             console.log(err);
             if (err.kind == 'ObjectId') {
-                res.status(404).send(`User id "${req.params.id.toString()}"  not valid`);
+                res.status(404).send(`User id "${req.params.id.toString()}" not valid`);
             }
         });
 }
@@ -29,7 +29,6 @@ const user_create_post = (req, res) => {
 }
 
 const user_delete = (req, res) => {
-    console.log(req.params.id, "REQ PARAMS ID");
     User.findByIdAndDelete(req.params.id)
         .then((result) => {
             if (result) {

@@ -66,11 +66,9 @@ const post_update = (req, res) => {
 
 const post_by_date = (req, res) => {
     let date = new Date(req.params.date);
-    let newDate = new Date(req.params.date);
-    newDate.setDate(newDate.getDate() + 1);
-    console.log(date, "NEW DATE");
-    console.log(newDate, "NEW DATE");
-    Post.find({ createdAt: { $gte: date, $lt: newDate } })
+    let postDate = date;
+    postDate.setDate(postDate.getDate() + 1);
+    Post.find({ createdAt: { $gte: date, $lt: postDate } })
         .then((result) => res.send(result))
         .catch((err) => console.log(err));
 }
