@@ -70,13 +70,15 @@ const interaction_index = (req, res) => {
         console.log("ONLY CITY");
         User.find({ city: req.query.city })
             .then((userList) => {
-                userList.forEach((user) => {
-                    console.log(user._id, "USER ID");
-                    Interaction.find({ post_id, user_id: { $in: user._id } }, null, { limit: per_page, skip: page * per_page })
-                        .then((result) => interactionsList.concat(result))
+                for(let user = 0; user < userList.length; user++) {
+                    console.log(userList[user]._id, "USER ID");
+                    Interaction.find({ post_id, user_id: { $in: userList[user]._id } }, null, { limit: per_page, skip: page * per_page })
+                        .then((result) => {
+                            interactionsList = interactionsList.concat(result);
+                            res.send(interactionsList);
+                        })
                         .catch((err) => testCatch(req, res, err));
-                })
-                    .then(() => res.send(interactionsList));
+                }
             })
             .catch((err) => testCatch(req, res, err));
         return;
