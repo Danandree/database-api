@@ -1,6 +1,6 @@
 const Post = require('../models/post');
 
-const responseFunctionTHEN = (req, res, result) => {
+function thenResponse(req, res, result) {
     if (result) {
         res.send(result);
     }
@@ -17,9 +17,24 @@ const catchErrorFunciton = (req, res, err) => {
 }
 
 const post_index = (req, res) => {
-    Post.find()
-        .then((result) => res.send(result))
-        .catch((err) => catchErrorFunciton(req, res, err));
+    let page = 0;
+    let per_page = 20;
+    if (req.query.per_page > 0 && req.query.per_page <= 100) { per_page = req.query.per_page; }
+    if (req.query.page > 0) { page = req.query.page - 1; }
+    if (req.query.date) {
+        console.log(req.query.date);
+        let date = new Date(req.query.date);
+        let postDate = new Date(req.query.date);
+        postDate.setDate(postDate.getDate() + 1);
+        Post.find({ createdAt: { $gte: date, $lt: postDate } }, null, { limit: per_page, skip: page * per_page })
+            .then((result) => res.send(result))
+            .catch((err) => catchErrorFunciton(req, res, err));
+    }
+    else {
+        Post.find({}, null, { limit: per_page, skip: page * per_page })
+            .then((result) => thenResponse(req, res, result))
+            .catch((err) => catchErrorFunciton(req, res, err));
+    }
 }
 
 const post_create_post = (req, res) => {
@@ -30,30 +45,22 @@ const post_create_post = (req, res) => {
 }
 
 const post_detail = (req, res) => {
+    console.log(req.query);
     Post.findById(req.params.id)
-        .then((result) => responseFunctionTHEN(req, res, result))
+        .then((result) => thenResponse(req, res, result))
         .catch((err) => catchErrorFunciton(req, res, err));
 }
 
 const post_delete = (req, res) => {
     Post.findByIdAndDelete(req.params.id)
-        .then((result) => responseFunctionTHEN(req, res, result))
+        .then((result) => thenResponse(req, res, result))
         .catch((err) => catchErrorFunciton(req, res, err));
 }
 
 const post_update = (req, res) => {
     Post.findByIdAndUpdate(req.params.id, req.body.post)
-        .then((result) => responseFunctionTHEN(req, res, result))
+        .then((result) => thenResponse(req, res, result))
         .catch((err) => catchErrorFunciton(req, res, err));
-}
-
-const post_by_date = (req, res) => {
-    let date = new Date(req.params.date);
-    let postDate = new Date(req.params.date);
-    postDate.setDate(postDate.getDate() + 1);
-    Post.find({ createdAt: { $gte: date, $lt: postDate } })
-        .then((result) => res.send(result))
-        .catch((err) => console.log(err));
 }
 
 module.exports = {
@@ -62,5 +69,4 @@ module.exports = {
     post_create_post,
     post_delete,
     post_update,
-    post_by_date,
 }

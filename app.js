@@ -6,7 +6,7 @@ const mongoose = require('mongoose');
 
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
-const interactionRoutes = require('./routes/interactionRoutes');
+// const interactionRoutes = require('./routes/interactionRoutes');
 
 const dbURI = process.env.DB_URI;
 const PORT = process.env.PORT || 3000;
