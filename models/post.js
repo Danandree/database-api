@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const Interaction = require('./interaction');
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
