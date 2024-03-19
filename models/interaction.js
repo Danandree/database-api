@@ -1,4 +1,6 @@
 const mongoose = require('mongoose');
+const User = require('./user');
+const Post = require('./post');
 const Schema = mongoose.Schema;
 
 const interactionSchema = new Schema({
@@ -8,11 +10,13 @@ const interactionSchema = new Schema({
         enum: ['comment', 'like']
     },
     post_id: {
-        type: String,
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'Post',
         required: true
     },
     user_id: {
-        type: String,
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: 'User',
         required: true
     }
 }, {

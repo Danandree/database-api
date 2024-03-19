@@ -45,9 +45,9 @@ const post_create_post = (req, res) => {
 }
 
 const post_detail = (req, res) => {
-    console.log(req.query);
+    console.log(req.params.id, "REQ ID");
     Post.findById(req.params.id)
-        .then((result) => thenResponse(req, res, result))
+        .then((post) => thenResponse(req, res, post))
         .catch((err) => catchErrorFunciton(req, res, err));
 }
 

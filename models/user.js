@@ -8,11 +8,14 @@ const userSchema = new Schema({
     },
     age: {
         type: Number,
-        required: true
+        required: true,
+        min: 16,
+        max: 100
     },
     city: {
         type: String,
-        required: true
+        required: true,
+        lowercase: true
     }
 });
 

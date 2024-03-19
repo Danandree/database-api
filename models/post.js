@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const Interaction = require('./interaction');
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
@@ -6,9 +7,11 @@ const postSchema = new Schema({
         type: String,
         required: true
     },
-    user_id: {
-        type: String,
-    },
+    interactions: {
+        type: [mongoose.SchemaTypes.ObjectId],
+        ref: 'Interaction',
+        default: [],
+    }
 }, {
     timestamps: true
 });

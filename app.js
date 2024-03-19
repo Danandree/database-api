@@ -37,3 +37,7 @@ mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true })
         app.listen(PORT, IPADDRESS, () => console.log(`server running on port ${PORT}`));
     })
     .catch((err) => console.log(err));
+
+// const mockPost = require ('./mock/posts');
+// const mockUser = require ('./mock/users');
+// const mockInteraction = require ('./mock/interactions');

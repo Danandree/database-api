@@ -1,3 +1,4 @@
+const { default: mongoose, Mongoose } = require('mongoose');
 const Interaction = require('../models/interaction');
 const User = require('../models/user');
 
@@ -8,7 +9,7 @@ const testThen = (req, res, result) => {
 
 const testCatch = (req, res, err) => {
     if (err.kind == 'ObjectId') {
-        res.status(404).send(`Interaction id "${req.params.id.toString()}" not valid`);
+        res.status(404).send(`Interaction id "${req.params.id}" not valid`);
     }
 }
 
@@ -23,8 +24,10 @@ async function getUserIdFromCity(req, res) {
 }
 
 const interaction_index = (req, res) => {
-    const post_id = req.baseUrl.split("/")[2];
-    // console.log(post_id, "POST ID");
+    console.log(req.query, "QUERY");
+    const post_id = new mongoose.Types.ObjectId(req.baseUrl.split("/")[2]);
+    // const postId = new mongoose.ObjectId(req.baseUrl.split("/")[2]);
+    console.log(post_id, "POST ID");
     let page = 0;
     let per_page = 20;
 
@@ -43,7 +46,7 @@ const interaction_index = (req, res) => {
                 // res.send(result);
                 console.log(userList, "result");
                 for (let user = 0; user < userList.length; user++) {
-                    Interaction.find({ post_id, user_id: { $in: userList[user]._id }, createdAt: { $gte: date, $lt: postDate } }, null, { limit: per_page, skip: page * per_page })
+                    Interaction.find({ post_id, user_id: userList[user]._id, createdAt: { $gte: date, $lt: postDate } }, null, { limit: per_page, skip: page * per_page })
                         .then((result) => {
                             interactionsList = interactionsList.concat(result);
                             res.send(interactionsList);
@@ -66,14 +69,18 @@ const interaction_index = (req, res) => {
         return;
     }
 
+    // cambiare -> cercare prima interaction e dopo user
     if (req.query.city) {
         console.log("ONLY CITY");
         User.find({ city: req.query.city })
             .then((userList) => {
-                for(let user = 0; user < userList.length; user++) {
+                console.log(userList, "result");
+                console.log(post_id, "POST ID");
+                for (let user = 0; user < userList.length; user++) {
                     console.log(userList[user]._id, "USER ID");
-                    Interaction.find({ post_id, user_id: { $in: userList[user]._id } }, null, { limit: per_page, skip: page * per_page })
+                    Interaction.find({ post_id, user_id: userList[user]._id }, null, { limit: per_page, skip: page * per_page })
                         .then((result) => {
+                            console.log(result, "INTERACTIONS RESULT");
                             interactionsList = interactionsList.concat(result);
                             res.send(interactionsList);
                         })
