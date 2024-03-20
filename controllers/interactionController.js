@@ -24,35 +24,62 @@ async function getUserIdFromCity(req, res) {
 }
 
 const interaction_index = async (req, res) => {
-    console.log(req.query, "QUERY");
     const post_id = new mongoose.Types.ObjectId(req.baseUrl.split("/")[2]);
-    // const postId = new mongoose.ObjectId(req.baseUrl.split("/")[2]);
-    console.log(post_id, "POST ID");
     let page = 0;
     let per_page = 20;
-
-    try {
-        let interactionsList = await Interaction.find({ post_id }, null, { limit: per_page, skip: page * per_page });
-        if (req.query.per_page > 0 && req.query.per_page <= 100) { per_page = req.query.per_page; }
-        if (req.query.page > 0) { page = req.query.page - 1; }
-        if (req.query.date) {
-            let date = new Date(req.query.date);
-            let postDate = new Date(req.query.date);
-            postDate.setDate(postDate.getDate() + 1);
-            interactionsList = await Interaction.find({ post_id, createdAt: { $gte: date, $lt: postDate } }, null, { limit: per_page, skip: page * per_page });
-        }
-        if (req.query.city) {
-            let userList = [];
-            let userIDs = [];
+    let interactionsList = [];
+    let query = { post_id };
+    if (req.query.per_page > 0 && req.query.per_page <= 100) { per_page = req.query.per_page; }
+    if (req.query.page > 0) { page = req.query.page - 1; }
+    if (req.query.date) {
+        let date = new Date(req.query.date);
+        let postDate = new Date(req.query.date);
+        postDate.setDate(postDate.getDate() + 1);
+        // query = { post_id, createdAt: { $gte: date, $lt: postDate } };
+        query.createdAt = { $gte: date, $lt: postDate };
+    }
+    if (req.query.city) {
+        let userList = [];
+        let userIDs = [];
+        try{
+            interactionsList = await Interaction.find(query);
             interactionsList.forEach((interaction) => { userIDs.push(interaction.user_id); })
             userList = await User.find({ _id: { $in: userIDs }, city: req.query.city });
             userIDs = [];
             userList.forEach((user) => { userIDs.push(user._id); })
-            interactionsList = await Interaction.find({ post_id, user_id: { $in: userIDs } }, null, { limit: per_page, skip: page * per_page });
+            // interactionsList = await Interaction.find({ post_id, user_id: { $in: userIDs } }, null, { limit: per_page, skip: page * per_page });
+            query.user_id = { $in: userIDs };
         }
-        console.log(interactionsList,"NO FILTER");
+        catch(err){
+            testCatch(req, res, err);
+        }
+    }
+    // try {
+    //     let interactionsList = await Interaction.find({ post_id }, null, { limit: per_page, skip: page * per_page });
+    //     if (req.query.per_page > 0 && req.query.per_page <= 100) { per_page = req.query.per_page; }
+    //     if (req.query.page > 0) { page = req.query.page - 1; }
+    //     if (req.query.date) {
+    //         let date = new Date(req.query.date);
+    //         let postDate = new Date(req.query.date);
+    //         postDate.setDate(postDate.getDate() + 1);
+    //         interactionsList = await Interaction.find({ post_id, createdAt: { $gte: date, $lt: postDate } }, null, { limit: per_page, skip: page * per_page });
+    //     }
+    //     if (req.query.city) {
+    //         let userList = [];
+    //         let userIDs = [];
+    //         interactionsList.forEach((interaction) => { userIDs.push(interaction.user_id); })
+    //         userList = await User.find({ _id: { $in: userIDs }, city: req.query.city });
+    //         userIDs = [];
+    //         userList.forEach((user) => { userIDs.push(user._id); })
+    //         interactionsList = await Interaction.find({ post_id, user_id: { $in: userIDs } }, null, { limit: per_page, skip: page * per_page });
+    //     }
+    //     testThen(req, res, interactionsList);
+    // } 
+    try {
+        interactionsList = await Interaction.find(query, null, { limit: per_page, skip: page * per_page });
         testThen(req, res, interactionsList);
-    } catch (err) {
+    }
+    catch (err) {
         testCatch(req, res, err);
     }
 }
@@ -78,7 +105,7 @@ const interaction_delete = async (req, res) => {
 
 const interaction_update = async (req, res) => {
     try {
-        const result = await Interaction.findByIdAndDelete(req.params.id);
+        const result = await Interaction.findByIdAndUpdate(req.params.id, req.body.interaction);
         testThen(req, res, result);
     } catch (err) {
         testCatch(req, res, err);

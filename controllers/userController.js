@@ -51,9 +51,6 @@ const user_delete = async (req, res) => {
 }
 
 const user_update = async (req, res) => {
-    User.findByIdAndUpdate(req.params.id, req.body.user)
-        .then((result) => userResponseThen(req, res, result))
-        .catch((err) => userResponseError(req, res, err));
     try{
         const result = await User.findByIdAndUpdate(req.params.id, req.body.user);
         userResponseThen(req, res, result);
