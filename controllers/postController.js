@@ -16,7 +16,8 @@ const catchErrorFunciton = (req, res, err) => {
     }
 }
 
-const post_index = (req, res) => {
+// async function post_index(req, res) {
+const post_index = async (req, res) => {
     let page = 0;
     let per_page = 20;
     if (req.query.per_page > 0 && req.query.per_page <= 100) { per_page = req.query.per_page; }
@@ -26,41 +27,63 @@ const post_index = (req, res) => {
         let date = new Date(req.query.date);
         let postDate = new Date(req.query.date);
         postDate.setDate(postDate.getDate() + 1);
-        Post.find({ createdAt: { $gte: date, $lt: postDate } }, null, { limit: per_page, skip: page * per_page })
-            .then((result) => res.send(result))
-            .catch((err) => catchErrorFunciton(req, res, err));
+        try {
+            const result = await Post.find({ createdAt: { $gte: date, $lt: postDate } }, null, { limit: per_page, skip: page * per_page });
+            thenResponse(req, res, result);
+        }
+        catch (err) { catchErrorFunciton(req, res, err); }
     }
     else {
-        Post.find({}, null, { limit: per_page, skip: page * per_page })
-            .then((result) => thenResponse(req, res, result))
-            .catch((err) => catchErrorFunciton(req, res, err));
+        try {
+            const result = await Post.find({}, null, { limit: per_page, skip: page * per_page });
+            thenResponse(req, res, result);
+        } catch (err) {
+            catchErrorFunciton(req, res, err);
+        }
     }
 }
 
-const post_create_post = (req, res) => {
+// async function post_create_post(req, res) {
+const post_create_post = async (req, res) => {
     const post = new Post(req.body.post);
-    post.save()
-        .then((result) => res.status(201).send(result))
-        .catch((err) => catchErrorFunciton(req, res, err));
+    try {
+        const result = await post.save();
+        res.status(201).send(result);
+    } catch (err) {
+        catchErrorFunciton(req, res, err);
+    }
 }
 
-const post_detail = (req, res) => {
+// async function post_detail(req, res) {
+const post_detail = async (req, res) => {
     console.log(req.params.id, "REQ ID");
-    Post.findById(req.params.id)
-        .then((post) => thenResponse(req, res, post))
-        .catch((err) => catchErrorFunciton(req, res, err));
+    try {
+        const post = await Post.findById(req.params.id);
+        thenResponse(req, res, post);
+    }
+    catch (err) { catchErrorFunciton(req, res, err); }
 }
 
-const post_delete = (req, res) => {
-    Post.findByIdAndDelete(req.params.id)
-        .then((result) => thenResponse(req, res, result))
-        .catch((err) => catchErrorFunciton(req, res, err));
+// async function post_delete(req, res) {
+const post_delete = async (req, res) => {
+    try {
+        const result = await Post.findByIdAndDelete(req.params.id);
+        thenResponse(req, res, result);
+    }
+    catch (err) {
+        catchErrorFunciton(req, res, err);
+    }
 }
 
-const post_update = (req, res) => {
-    Post.findByIdAndUpdate(req.params.id, req.body.post)
-        .then((result) => thenResponse(req, res, result))
-        .catch((err) => catchErrorFunciton(req, res, err));
+// async function post_update(req, res) {
+const post_update = async (req, res) => {
+    try {
+        const result = await Post.findByIdAndUpdate(req.params.id, req.body.post);
+        thenResponse(req, res, result);
+    }
+    catch (err) {
+        catchErrorFunciton(req, res, err);
+    }
 }
 
 module.exports = {

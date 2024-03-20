@@ -12,36 +12,54 @@ const userResponseError = (req, res, err) => {
     }
 }
 
-const user_index = (req, res) => {
-    User.find()
-        .then((result) => res.send(result))
-        .catch((err) => userResponseError(req, res, err));
+const user_index = async (req, res) => {
+    try {
+        const result = await User.find();
+        userResponseThen(req, res, result);
+    } catch (err) {
+        userResponseError(req, res, err);
+    }
 }
 
-const user_create_post = (req, res) => {
+const user_create_post = async (req, res) => {
     const user = new User(req.body.user);
-    user.save()
-        .then((result) => res.status(201).send(result))
-        .catch((err) => userResponseError(req, res, err));
+    try {
+        const result = await user.save();
+        res.status(201).send(result);
+    } catch (err) {
+        userResponseError(req, res, err);
+    }
 }
 
-const user_detail = (req, res) => {
-    User.findById(req.params.id)
-        .then((result) => userResponseThen(req, res, result))
-        .catch((err) => userResponseError(req, res, err));
+const user_detail = async (req, res) => {
+    try{
+        const user = await User.findById(req.params.id);
+        userResponseThen(req, res, user);
+    }catch(err){
+        userResponseError(req, res, err);
+    }
 }
 
-const user_delete = (req, res) => {
-    User.findByIdAndDelete(req.params.id)
-        .then((result) => userResponseThen(req, res, result))
-        .catch((err) => userResponseError(req, res, err));
+const user_delete = async (req, res) => {
+    try{
+        const result = await User.findByIdAndDelete(req.params.id);
+        userResponseThen(req, res, result);
+    }catch(err){
+        userResponseError(req, res, err);
+    }
 
 }
 
-const user_update = (req, res) => {
+const user_update = async (req, res) => {
     User.findByIdAndUpdate(req.params.id, req.body.user)
         .then((result) => userResponseThen(req, res, result))
         .catch((err) => userResponseError(req, res, err));
+    try{
+        const result = await User.findByIdAndUpdate(req.params.id, req.body.user);
+        userResponseThen(req, res, result);
+    }catch(err){
+        userResponseError(req, res, err);
+    }
 }
 
 module.exports = {
