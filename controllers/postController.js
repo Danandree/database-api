@@ -1,22 +1,21 @@
 const Post = require('../models/post');
+const Interaction = require('../models/interaction');
 
-function thenResponse(req, res, result) {
-    if (result) {
-        res.send(result);
+const mainResponse = (req, res, result, status = 200) => {
+    if (result == null) { 
+        result = {message: `Post id "${req.params.id.toString()}" not found`}; 
+        status = 404;
     }
-    else {
-        res.status(404).send(`Post with id "${req.params.id.toString()}"  not found`);
-    }
+    res.status(status).send(result);
 }
 
-const catchErrorFunciton = (req, res, err) => {
-    console.log(err);
+const catchError = (req, res, err) => {
+    console.log(err,"CATCH ERROR");
     if (err.kind == 'ObjectId') {
-        res.status(404).send(`Post id "${req.params.id.toString()}" not valid`);
+        res.status(404).send({message: `Post id "${req.params.id.toString()}" not valid`});
     }
 }
 
-// async function post_index(req, res) {
 const post_index = async (req, res) => {
     let page = 0;
     let per_page = 20;
@@ -27,57 +26,63 @@ const post_index = async (req, res) => {
         let date = new Date(req.query.date);
         let postDate = new Date(req.query.date);
         postDate.setDate(postDate.getDate() + 1);
-        findQuery = { createdAt: { $gte: date, $lt: postDate } };
+        findQuery.createdAt = { $gte: date, $lt: postDate };
     }
     try {
-        const result = await Post.find(findQuery, null, { limit: per_page, skip: page * per_page });
-        thenResponse(req, res, result);
+        const postList = await Post.find(findQuery, null, { limit: per_page, skip: page * per_page });
+        const postIds = postList.map((post) => post._id);
+        const interactionsList = await Interaction.find({ post_id: { $in: postIds } });
+        postList.forEach((post) => {
+            post.interactions = interactionsList.filter((interaction) => interaction.post_id.toString() === post._id.toString()).map((interaction) => interaction.id);
+        });
+        mainResponse(req, res, postList);
     } catch (err) {
-        catchErrorFunciton(req, res, err);
+        catchError(req, res, err);
     }
 
 }
 
-// async function post_create_post(req, res) {
 const post_create_post = async (req, res) => {
     const post = new Post(req.body.post);
     try {
         const result = await post.save();
-        res.status(201).send(result);
+        mainResponse(req, res, result, 201);
     } catch (err) {
-        catchErrorFunciton(req, res, err);
+        catchError(req, res, err);
     }
 }
 
-// async function post_detail(req, res) {
 const post_detail = async (req, res) => {
     console.log(req.params.id, "REQ ID");
     try {
         const post = await Post.findById(req.params.id);
-        thenResponse(req, res, post);
+        console.log(post, "POST");
+        if (post) {
+            const interactionsList = await Interaction.find({ post_id: req.params.id });
+            post.interactions = interactionsList.map((interaction) => interaction.id);
+        }
+        mainResponse(req, res, post);
     }
-    catch (err) { catchErrorFunciton(req, res, err); }
+    catch (err) { catchError(req, res, err); }
 }
 
-// async function post_delete(req, res) {
 const post_delete = async (req, res) => {
     try {
         const result = await Post.findByIdAndDelete(req.params.id);
-        thenResponse(req, res, result);
+        mainResponse(req, res, result);
     }
     catch (err) {
-        catchErrorFunciton(req, res, err);
+        catchError(req, res, err);
     }
 }
 
-// async function post_update(req, res) {
 const post_update = async (req, res) => {
     try {
         const result = await Post.findByIdAndUpdate(req.params.id, req.body.post);
-        thenResponse(req, res, result);
+        mainResponse(req, res, result);
     }
     catch (err) {
-        catchErrorFunciton(req, res, err);
+        catchError(req, res, err);
     }
 }
 

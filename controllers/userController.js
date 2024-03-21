@@ -1,15 +1,24 @@
 const User = require('../models/user');
 
-const userResponseThen = (req, res, result) => {
-    if (result) { res.send(result); }
-    else { res.status(404).send(`User id "${req.params.id.toString()}" doesn't exists`); }
+const userResponseThen = (req, res, result, status = 200) => {
+    if(!result){
+        result = {message: `User id "${req.params.id.toString()}" doesn't exists`};
+        status = 404;
+    }
+    res.status(status).send(result);    
 }
 
-const userResponseError = (req, res, err) => {
+const userResponseError = (req, res, err, status = 404) => {
     console.log(err);
+    let message = {};
     if (err.kind == 'ObjectId') {
-        res.status(404).send(`User id "${req.params.id.toString()}" not valid`);
+        message = { message: `User id "${req.params.id.toString()}" not valid` };
     }
+    if(err.errors.age){
+        status = 400;
+        message = { message: err.errors.age.message };
+    }
+    res.status(status).send(message);
 }
 
 const user_index = async (req, res) => {
@@ -25,7 +34,7 @@ const user_create_post = async (req, res) => {
     const user = new User(req.body.user);
     try {
         const result = await user.save();
-        res.status(201).send(result);
+        userResponseThen(req, res, result, 201);
     } catch (err) {
         userResponseError(req, res, err);
     }
