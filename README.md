@@ -9,7 +9,7 @@ Per testare l'applicazione è necessario che sul vostro sistema sia intallato no
 Una volta scaricato il repository intallare le dipendenza con il comando npm install e lanciare il file app.js.<br>
 
 Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saranno presi i parametri di default:
-- URI Database: mongo:\\localhost:12033
+- URI Database: mongo://localhost:27017
 - Indirizzo IP applicazione: localhost
 - Porta applicazione: 3000
 
