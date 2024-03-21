@@ -26,7 +26,7 @@ app.get('/', (req, res) => {
 
 // 404
 app.use((req, res) => {
-    res.status(404).send('404 page not found');
+    res.status(404).send({ message: 'Page not found' });
 });
 
 try {

@@ -13,35 +13,33 @@
         <ul>
             <li>GET <%= urlToServer %>/users - get all users</li>
             <li>POST <%= urlToServer %>/users - create new user</li>
-            <li>GET <%= urlToServer %>/users/:id - get user by id</li>
-            <li>DELETE <%= urlToServer %>/users/:id - delete user by id</li>
-            <li>PUT | PATCH <%= urlToServer %>/users/:id - update user by id</li>
+            <li>DELETE <%= urlToServer %>/users/{id} - delete user by id</li>
+            <li>PUT | PATCH <%= urlToServer %>/users/{id} - update user by id</li>
         </ul>
         <h3>POSTS:</h3>
         <ul>
             <li>GET <%= urlToServer %>/posts - get all posts</li>
             <li>POST <%= urlToServer %>/posts - create new post</li>
-            <li>GET <%= urlToServer %>/posts/:id - get post by id</li>
-            <li>DELETE <%= urlToServer %>/posts/:id - delete post by id</li>
-            <li>PUT | PATCH <%= urlToServer %>/posts/:id - update post by id</li>
-            <li>GET <%= urlToServer %>/posts/:id/interaction - get interactions' post by post id</li>
+            <li>GET <%= urlToServer %>/posts/{id} - get post by id</li>
+            <li>DELETE <%= urlToServer %>/posts/{id} - delete post by id</li>
+            <li>PUT | PATCH <%= urlToServer %>/posts/{id} - update post by id</li>
         </ul>
         <h3>INTERACTIONS:</h3>
         <ul>
-            <li>GET <%= urlToServer %>/posts/:id/interaction - get interaction by post id</li>
-            <li>POST <%= urlToServer %>/posts/:id/interaction - create new interaction</li>
-            <li>DELETE <%= urlToServer %>/posts/:id/interaction/:interactionID - delete interaction by post and interaction id</li>
-            <li>PUT | PATCH <%= urlToServer %>/posts/:id/interaction/:interactionID - update interaction by post and interaction id</li>
+            <li>GET <%= urlToServer %>/posts/{id}/interaction - get interaction by post id</li>
+            <li>POST <%= urlToServer %>/posts/{id}/interaction - create new interaction</li>
+            <li>DELETE <%= urlToServer %>/posts/{id}/interaction/{interactionID} - delete interaction by id</li>
+            <li>PUT | PATCH <%= urlToServer %>/posts/{id}/interaction/{interactionID} - update interaction by id</li>
         </ul>
         <h3>Query Url</h3>
         <ul>
-            <li>posts?date=YYYY-MM-DD</li>
-            <li>posts?date=YYYY.MM.DD</li>
-            <li>posts/interactions?page=1&per_page=10</li>
-            <li>posts/:id/interactions?city=venezia</li>
-            <li>posts/:id/interactions?date=YYYY-MM-DD</li>
-            <li>posts/:id/interactions?city=venezia&date=YYYY-MM-DD</li>
-            <li>posts/:id/interactions?city=venezia&date=YYYY.MM.DD</li>
+            <li>/posts?date=YYYY-MM-DD</li>
+            <li>/posts?date=YYYY.MM.DD</li>
+            <li>/posts/interactions?page=1&per_page=10</li>
+            <li>/posts/{id}/interactions?city=venice</li>
+            <li>/posts/{id}/interactions?date=YYYY-MM-DD</li>
+            <li>/posts/{id}/interactions?city=venice&date=YYYY-MM-DD</li>
+            <li>/posts/{id}/interactions?city=venice&date=YYYY.MM.DD</li>
         </ul>
     </div>
 </body>
