@@ -20,7 +20,7 @@ const post_index = async (req, res) => {
     let page = 0;
     let per_page = 20;
     let findQuery = {};
-    if (req.query.per_page > 0 && req.query.per_page <= 100) { per_page = req.query.per_page; }
+    if (req.query.per_page > 0) { per_page = req.query.per_page; }
     if (req.query.page > 0) { page = req.query.page - 1; }
     if (req.query.date) {
         let date = new Date(req.query.date);
