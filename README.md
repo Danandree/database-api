@@ -13,6 +13,9 @@ Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saran
 - Indirizzo IP applicazione: localhost
 - Porta applicazione: 3000
 
+> [!IMPORTANT]
+> Per modificare i parametri dell'applicazione quali URI del database, ip del server e porta da usare bisogna creare un file .env ed inserire i dati (guardare il file di esempio ".env-example")
+
 ## Comandi dell'applicazione
 - UTENTI:
     - GET /users --> Restituisce tutti gli utenti
@@ -29,6 +32,3 @@ Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saran
     - POST posts/{id}/interactions --> Crea una nuova interazione
     - DELETE posts/{id}/interactions/{interactionId} --> Elimina una interazione
     - PUT | PATCH posts/{id}/interactions/{interactionId} --> Modifica una interazione
-
-> [!IMPORTANT]
-> Per modificare i parametri dell'applicazione quali URI del database, ip del server e porta da usare bisogna creare un file .env ed inserire i dati (guardare il file di esempio ".env-esempio")
