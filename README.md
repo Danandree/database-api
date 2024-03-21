@@ -34,5 +34,9 @@ Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saran
     - PUT | PATCH posts/{id}/interactions/{interactionId} --> Modifica una interazione
  
 L'applicazione implementa anche una query di ricerca con la quale si possono cercare post per data oppure interazioni per data o città:
-- /posts?date=yyyy.mm.dd --> Cerca post per data
-- /posts/{id}/interactions?date=yyyy.mm.dd&city=venice --> Cerca interazioni per data e città
+- GET /posts?date=yyyy.mm.dd --> Cerca post per data
+- GET /posts/{id}/interactions?date=yyyy.mm.dd&city=venice --> Cerca interazioni per data e città
+
+> [!NOTE]
+> L'applicazione fornisce di default 20 risultati, per mostrarne di più usare la query "?per_page=50".<br>
+> Per cambiare pagina usare la query "?page=1"
