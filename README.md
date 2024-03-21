@@ -1,7 +1,7 @@
 # API RESTful
-Applicazione che permette di contattare un database grazie alla chiamate rest per creare collezioni di utenti, post e interazioni (commenti e like).
+Applicazione che permette di contattare un database grazie alla chiamate rest per creare, visualizzare e modificare collezioni di utenti, post e interazioni (commenti e like).
 
-> [!IMPORTANT]
+> [!NOTE]
 > L'applicazione si appoggia ad un database MongoDB
 
 ## Instllazione e test
@@ -12,6 +12,9 @@ Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saran
 - URI Database: mongo://localhost:27017
 - Indirizzo IP applicazione: localhost
 - Porta applicazione: 3000
+
+> [!IMPORTANT]
+> Per modificare i parametri dell'applicazione quali URI del database, ip del server e porta da usare bisogna creare un file .env ed inserire i dati (guardare il file di esempio ".env-example")
 
 ## Comandi dell'applicazione
 - UTENTI:
@@ -29,6 +32,11 @@ Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saran
     - POST posts/{id}/interactions --> Crea una nuova interazione
     - DELETE posts/{id}/interactions/{interactionId} --> Elimina una interazione
     - PUT | PATCH posts/{id}/interactions/{interactionId} --> Modifica una interazione
+ 
+L'applicazione implementa anche una query di ricerca con la quale si possono cercare post per data oppure interazioni per data o città:
+- GET /posts?date=yyyy.mm.dd --> Cerca post per data
+- GET /posts/{id}/interactions?date=yyyy.mm.dd&city=venice --> Cerca interazioni per data e città
 
-> [!IMPORTANT]
-> Per modificare i parametri dell'applicazione quali URI del database, ip del server e porta da usare bisogna creare un file .env ed inserire i dati (guardare il file di esempio ".env-esempio")
+> [!NOTE]
+> L'applicazione fornisce di default 20 risultati, per mostrarne di più usare la query "?per_page=50".<br>
+> Per cambiare pagina usare la query "?page=1"
