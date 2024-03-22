@@ -7,7 +7,7 @@ const mongoose = require('mongoose');
 const userRoutes = require('./routes/userRoutes');
 const postRoutes = require('./routes/postRoutes');
 
-const dbURI = process.env.DB_URI;
+const dbURI = process.env.DB_URI || "mongodb://localhost:27017/";
 const PORT = process.env.PORT || 3000;
 const IPADDRESS = process.env.IPADDRESS || 'localhost';
 

@@ -26,8 +26,12 @@ const catchRequestError = (req, res, err, status = 404) => {
 }
 
 const user_index = async (req, res) => {
+    let page = 0;
+    let per_page = 100;
+    if (req.query.per_page > 0) { per_page = req.query.per_page; }
+    if (req.query.page > 0) { page = req.query.page - 1; }
     try {
-        const result = await User.find();
+        const result = await User.find({}, null, { limit: per_page, skip: page * per_page });
         sendRequestResponse(req, res, result);
     } catch (err) {
         catchRequestError(req, res, err);
