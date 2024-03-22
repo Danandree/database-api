@@ -40,3 +40,6 @@ L'applicazione implementa anche una query di ricerca con la quale si possono cer
 > [!NOTE]
 > L'applicazione fornisce di default 100 risultati, per mostrarne di più usare la query "?per_page=50".<br>
 > Per cambiare pagina usare la query "?page=1"
+
+> [!TIP]
+> La lista dei comandi é consultabile come pagina html alla radice del dominio dell'applicazione (/).
