@@ -36,7 +36,6 @@ const user_index = async (req, res) => {
 
 const user_create_post = async (req, res) => {
     const user = new User(req.body.user);
-    console.log(user, "USER");
     const duplicateUser = await User.find({ username: user.username });
     if (duplicateUser.length === 0) {
         try {

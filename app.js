@@ -10,7 +10,7 @@ const postRoutes = require('./routes/postRoutes');
 const dbURI = process.env.DB_URI;
 const PORT = process.env.PORT || 3000;
 const IPADDRESS = process.env.IPADDRESS || '0.0.0.0';
-const urlToServer = "http://192.168.0.4:3000";
+const urlToServer = `${IPADDRESS}:${PORT}`;
 
 const app = express();
 app.use(cors());
@@ -30,14 +30,10 @@ app.use((req, res) => {
 });
 
 try {
-    const connection = mongoose.connect(dbURI, { useNewUrlParser: true, useUnifiedTopology: true });
+    const connection = mongoose.connect(dbURI);
     console.log('connected to db');
     app.listen(PORT, IPADDRESS, () => console.log(`server running on port ${PORT}`));
 }
 catch (err) {
     console.log(err);
 }
-
-// const mockPost = require ('./mock/posts');
-// const mockUser = require ('./mock/users');
-// const mockInteraction = require ('./mock/interactions');

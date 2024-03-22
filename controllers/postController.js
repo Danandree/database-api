@@ -2,17 +2,17 @@ const Post = require('../models/post');
 const Interaction = require('../models/interaction');
 
 const mainResponse = (req, res, result, status = 200) => {
-    if (result == null) { 
-        result = {message: `Post id "${req.params.id.toString()}" not found`}; 
+    if (result == null) {
+        result = { message: `Post id "${req.params.id.toString()}" not found` };
         status = 404;
     }
     res.status(status).json(result);
 }
 
 const catchError = (req, res, err) => {
-    console.log(err,"CATCH ERROR");
+    console.log(err);
     if (err.kind == 'ObjectId') {
-        res.status(404).send({message: `Post id "${req.params.id.toString()}" not valid`});
+        res.status(404).send({ message: `Post id "${req.params.id.toString()}" not valid` });
     }
 }
 
@@ -53,17 +53,17 @@ const post_create_post = async (req, res) => {
 }
 
 const post_detail = async (req, res) => {
-    console.log(req.params.id, "REQ ID");
     try {
         const post = await Post.findById(req.params.id);
-        console.log(post, "POST");
         if (post) {
             const interactionsList = await Interaction.find({ post_id: req.params.id });
             post.interactions = interactionsList.map((interaction) => interaction.id);
         }
         mainResponse(req, res, post);
     }
-    catch (err) { catchError(req, res, err); }
+    catch (err) {
+        catchError(req, res, err);
+    }
 }
 
 const post_delete = async (req, res) => {
