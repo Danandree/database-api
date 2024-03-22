@@ -9,8 +9,7 @@ const postRoutes = require('./routes/postRoutes');
 
 const dbURI = process.env.DB_URI;
 const PORT = process.env.PORT || 3000;
-const IPADDRESS = process.env.IPADDRESS || '0.0.0.0';
-const urlToServer = `${IPADDRESS}:${PORT}`;
+const IPADDRESS = process.env.IPADDRESS || 'localhost';
 
 const app = express();
 app.use(cors());
@@ -26,7 +25,7 @@ app.get('/', (req, res) => {
 
 // 404
 app.use((req, res) => {
-    res.status(404).send({ message: 'Page not found' });
+    res.status(404).send({ message: `URL "${req.url}" not found` });
 });
 
 try {
