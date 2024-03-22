@@ -1,6 +1,6 @@
 const User = require('../models/user');
 
-const userResponseThen = (req, res, result, status = 200) => {
+const sendRequestResponse = (req, res, result, status = 200) => {
     if (!result) {
         result = { message: `User id "${req.params.id.toString()}" doesn't exists` };
         status = 404;
@@ -8,7 +8,7 @@ const userResponseThen = (req, res, result, status = 200) => {
     res.status(status).json(result);
 }
 
-const userResponseError = (req, res, err, status = 404) => {
+const catchRequestError = (req, res, err, status = 404) => {
     console.log(err);
     let message = {};
     if (err.kind == 'ObjectId') {
@@ -28,9 +28,9 @@ const userResponseError = (req, res, err, status = 404) => {
 const user_index = async (req, res) => {
     try {
         const result = await User.find();
-        userResponseThen(req, res, result);
+        sendRequestResponse(req, res, result);
     } catch (err) {
-        userResponseError(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 
@@ -40,31 +40,31 @@ const user_create_post = async (req, res) => {
     if (duplicateUser.length === 0) {
         try {
             const result = await user.save();
-            userResponseThen(req, res, result, 201);
+            sendRequestResponse(req, res, result, 201);
         } catch (err) {
-            userResponseError(req, res, err);
+            catchRequestError(req, res, err);
         }
     }
     else {
-        userResponseError(req, res, { errors: { message: "Username already exists" } }, 400);
+        catchRequestError(req, res, { errors: { message: "Username already exists" } }, 400);
     }
 }
 
 const user_detail = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);
-        userResponseThen(req, res, user);
+        sendRequestResponse(req, res, user);
     } catch (err) {
-        userResponseError(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 
 const user_delete = async (req, res) => {
     try {
         const result = await User.findByIdAndDelete(req.params.id);
-        userResponseThen(req, res, result);
+        sendRequestResponse(req, res, result);
     } catch (err) {
-        userResponseError(req, res, err);
+        catchRequestError(req, res, err);
     }
 
 }
@@ -72,9 +72,9 @@ const user_delete = async (req, res) => {
 const user_update = async (req, res) => {
     try {
         const result = await User.findByIdAndUpdate(req.params.id, req.body.user);
-        userResponseThen(req, res, result);
+        sendRequestResponse(req, res, result);
     } catch (err) {
-        userResponseError(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 

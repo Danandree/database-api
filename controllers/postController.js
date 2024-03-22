@@ -1,7 +1,7 @@
 const Post = require('../models/post');
 const Interaction = require('../models/interaction');
 
-const mainResponse = (req, res, result, status = 200) => {
+const sendRequestResponse = (req, res, result, status = 200) => {
     if (result == null) {
         result = { message: `Post id "${req.params.id.toString()}" not found` };
         status = 404;
@@ -9,7 +9,7 @@ const mainResponse = (req, res, result, status = 200) => {
     res.status(status).json(result);
 }
 
-const catchError = (req, res, err) => {
+const catchRequestError = (req, res, err) => {
     console.log(err);
     if (err.kind == 'ObjectId') {
         res.status(404).send({ message: `Post id "${req.params.id.toString()}" not valid` });
@@ -35,9 +35,9 @@ const post_index = async (req, res) => {
         postList.forEach((post) => {
             post.interactions = interactionsList.filter((interaction) => interaction.post_id.toString() === post._id.toString()).map((interaction) => interaction.id);
         });
-        mainResponse(req, res, postList);
+        sendRequestResponse(req, res, postList);
     } catch (err) {
-        catchError(req, res, err);
+        catchRequestError(req, res, err);
     }
 
 }
@@ -46,9 +46,9 @@ const post_create_post = async (req, res) => {
     const post = new Post(req.body.post);
     try {
         const result = await post.save();
-        mainResponse(req, res, result, 201);
+        sendRequestResponse(req, res, result, 201);
     } catch (err) {
-        catchError(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 
@@ -59,30 +59,30 @@ const post_detail = async (req, res) => {
             const interactionsList = await Interaction.find({ post_id: req.params.id });
             post.interactions = interactionsList.map((interaction) => interaction.id);
         }
-        mainResponse(req, res, post);
+        sendRequestResponse(req, res, post);
     }
     catch (err) {
-        catchError(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 
 const post_delete = async (req, res) => {
     try {
         const result = await Post.findByIdAndDelete(req.params.id);
-        mainResponse(req, res, result);
+        sendRequestResponse(req, res, result);
     }
     catch (err) {
-        catchError(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 
 const post_update = async (req, res) => {
     try {
         const result = await Post.findByIdAndUpdate(req.params.id, req.body.post);
-        mainResponse(req, res, result);
+        sendRequestResponse(req, res, result);
     }
     catch (err) {
-        catchError(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 

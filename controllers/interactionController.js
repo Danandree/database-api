@@ -3,7 +3,7 @@ const Interaction = require('../models/interaction');
 const User = require('../models/user');
 const Post = require('../models/post');
 
-const testThen = (req, res, result, status = 200) => {
+const sendRequestResponse = (req, res, result, status = 200) => {
     if (result == null) {
         result = { message: `Interaction id "${req.params.id.toString()}" not found` };
         status = 404;
@@ -11,7 +11,7 @@ const testThen = (req, res, result, status = 200) => {
     res.status(status).json(result);
 }
 
-const testCatch = (req, res, err, status = 404) => {
+const catchRequestError = (req, res, err, status = 404) => {
     console.log(err);
     let response = { error: {} };
     if (err.kind == 'ObjectId') {
@@ -38,11 +38,11 @@ const interaction_index = async (req, res) => {
         post_id = new mongoose.Types.ObjectId(post_id);
         const post = await Post.findById(post_id);
         if (!post) {
-            return testCatch(req, res, {kind: 'ObjectId', type: 'Post'});
+            return catchRequestError(req, res, {kind: 'ObjectId', type: 'Post'});
         }
 
     } catch (err) {
-        return testCatch(req, res, {kind: 'ObjectId', type: 'Post'});
+        return catchRequestError(req, res, {kind: 'ObjectId', type: 'Post'});
         
     }
     let page = 0;
@@ -69,15 +69,15 @@ const interaction_index = async (req, res) => {
             query.user_id = { $in: userIDs };
         }
         catch (err) {
-            return testCatch(req, res, err);
+            return catchRequestError(req, res, err);
         }
     }
     try {
         interactionsList = await Interaction.find(query, null, { limit: per_page, skip: page * per_page });
-        testThen(req, res, interactionsList);
+        sendRequestResponse(req, res, interactionsList);
     }
     catch (err) {
-        testCatch(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 
@@ -88,35 +88,35 @@ const interaction_post = async (req, res) => {
         const post = await Post.findById(interaction.post_id);
         if (user && post) {
             const result = await interaction.save();
-            testThen(req, res, result, 201);
+            sendRequestResponse(req, res, result, 201);
         }
         else {
             let message = { error: { message: "User and post must exist" } };
             if (user) { message.error.message = "Post must exist"; }
             if (post) { message.error.message = "User must exist"; }
-            testThen(req, res, message, 400);
+            sendRequestResponse(req, res, message, 400);
         }
     }
     catch (err) {
-        testCatch(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 
 const interaction_delete = async (req, res) => {
     try {
         const result = await Interaction.findByIdAndDelete(req.params.id);
-        testThen(req, res, result);
+        sendRequestResponse(req, res, result);
     } catch (err) {
-        testCatch(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 
 const interaction_update = async (req, res) => {
     try {
         const result = await Interaction.findByIdAndUpdate(req.params.id, req.body.interaction);
-        testThen(req, res, result);
+        sendRequestResponse(req, res, result);
     } catch (err) {
-        testCatch(req, res, err);
+        catchRequestError(req, res, err);
     }
 }
 
