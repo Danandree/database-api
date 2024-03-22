@@ -9,7 +9,7 @@ const testThen = (req, res, result, status = 200) => {
         result = { message: `Interaction id "${req.params.id.toString()}" not found` };
         status = 404;
     }
-    res.status(status).send(result);
+    res.status(status).json(result);
 }
 
 const testCatch = (req, res, err, status = 404) => {
@@ -33,7 +33,7 @@ const interaction_index = async (req, res) => {
         return testThen(req, res, { error: { message: `Post id "${post_id}" not found` } }, 404);
     }
     let page = 0;
-    let per_page = 20;
+    let per_page = 100;
     let interactionsList = [];
     let query = { post_id };
     if (req.query.per_page > 0) { per_page = req.query.per_page; }
