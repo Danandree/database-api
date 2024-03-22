@@ -19,7 +19,7 @@ Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saran
 
 Una volta installate le dipendenze e creato il file .env, avviare l'applicazione principale app.js con nodeJs.
 
-## Comandi dell'applicazione
+## Richieste dell'applicazione
 - UTENTI:
     - GET /users --> Restituisce tutti gli utenti
     - POST /users --> Crea un nuovo utente
