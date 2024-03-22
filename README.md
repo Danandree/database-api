@@ -38,5 +38,5 @@ L'applicazione implementa anche una query di ricerca con la quale si possono cer
 - GET /posts/{id}/interactions?date=yyyy.mm.dd&city=venice --> Cerca interazioni per data e città
 
 > [!NOTE]
-> L'applicazione fornisce di default 20 risultati, per mostrarne di più usare la query "?per_page=50".<br>
+> L'applicazione fornisce di default 100 risultati, per mostrarne di più usare la query "?per_page=50".<br>
 > Per cambiare pagina usare la query "?page=1"
