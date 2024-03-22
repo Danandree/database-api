@@ -6,7 +6,7 @@ Applicazione che permette di contattare un database grazie alla chiamate rest pe
 
 ## Instllazione e test
 Per testare l'applicazione è necessario che sul vostro sistema sia intallato nodeJs, il relativo package manager (NPM) ed abbiate accesso ad un database MongoDb.<br>
-Una volta scaricato il repository intallare le dipendenza con il comando npm install e lanciare il file app.js.<br>
+Una volta scaricato il repository intallare le dipendenza con il comando npm install e creare un file .env con i dati dell'applicazione.<br>
 
 Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saranno presi i parametri di default:
 - URI Database: mongo://localhost:27017
@@ -15,6 +15,8 @@ Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saran
 
 > [!IMPORTANT]
 > Per modificare i parametri dell'applicazione quali URI del database, ip del server e porta da usare bisogna creare un file .env ed inserire i dati (guardare il file di esempio ".env-example")
+
+Una volta installate le dipendenze e creato il file .env, avviare l'applicazione facendo partire il file app.js.
 
 ## Comandi dell'applicazione
 - UTENTI:
