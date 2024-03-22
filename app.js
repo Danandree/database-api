@@ -20,7 +20,7 @@ app.use(`/users`, userRoutes);
 app.use(`/posts`, postRoutes);
 
 app.get('/', (req, res) => {
-    res.render('index', { urlToServer });
+    res.render('index');
 });
 
 // 404
