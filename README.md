@@ -1,5 +1,6 @@
-# API RESTful
-Applicazione che permette di contattare un database grazie alla chiamate rest per creare, visualizzare e modificare collezioni di utenti, post e interazioni (commenti e like).
+# Database API
+
+API JSON RESTful che permettono di contattare un database per creare, visualizzare e modificare collezioni di utenti, post e interazioni (commenti e like).
 
 > [!NOTE]
 > L'applicazione si appoggia ad un database MongoDB
@@ -16,9 +17,9 @@ Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saran
 > [!IMPORTANT]
 > Per modificare i parametri dell'applicazione quali URI del database, ip del server e porta da usare bisogna creare un file .env ed inserire i dati (guardare il file di esempio ".env-example")
 
-Una volta installate le dipendenze e creato il file .env, avviare l'applicazione facendo partire il file app.js.
+Una volta installate le dipendenze e creato il file .env, avviare l'applicazione principale app.js con nodeJs.
 
-## Comandi dell'applicazione
+## Richieste dell'applicazione
 - UTENTI:
     - GET /users --> Restituisce tutti gli utenti
     - POST /users --> Crea un nuovo utente
