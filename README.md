@@ -1,5 +1,6 @@
-# API RESTful
-Applicazione che permette di contattare un database grazie alla chiamate rest per creare, visualizzare e modificare collezioni di utenti, post e interazioni (commenti e like).
+# Database API
+
+API JSON RESTful che permettono di contattare un database per creare, visualizzare e modificare collezioni di utenti, post e interazioni (commenti e like).
 
 > [!NOTE]
 > L'applicazione si appoggia ad un database MongoDB
