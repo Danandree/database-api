@@ -16,10 +16,11 @@ const testCatch = (req, res, err, status = 404) => {
     let response = { error: {} };
     if (err.kind == 'ObjectId') {
         status = 400
-        response.error = { message: `Interaction id "${req.params.id}" not valid` };
-        if(err.type == 'Post') {
-            status = 404
-            response.error = { message: `Post id "${req.baseUrl.split("/")[2]}" not found` };
+        if(err.path == "_id") {
+            response.error = { message: `Interaction id "${req.params.id.toString()}" not valid` };
+        }
+        if(err.type == 'Post' || err.path == 'post_id' || err.path == 'user_id') {
+            response.error = { message: `${err.path} "${err.value}" not found` };
         }
     }
     if (err.errors) {
