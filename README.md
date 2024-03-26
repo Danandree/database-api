@@ -17,7 +17,7 @@ Assicurarsi di aver inserito correttamente i dati nel file .env altrimenti saran
 > [!IMPORTANT]
 > Per modificare i parametri dell'applicazione quali URI del database, ip del server e porta da usare bisogna creare un file .env ed inserire i dati (guardare il file di esempio ".env-example")
 
-Una volta installate le dipendenze e creato il file .env, avviare l'applicazione principale app.js con nodeJs.
+Una volta installate le dipendenze e creato il file .env, avviare l'applicazione principale con il comando "npm start".
 
 ## Richieste dell'applicazione
 - UTENTI:
