@@ -5,7 +5,7 @@ const sendRequestResponse = (req, res, result, status = 200) => {
         result = { message: `User id "${req.params.id.toString()}" doesn't exists` };
         status = 404;
     }
-    res.status(status).json(result);
+    res.status(status).send(result);
 }
 
 const catchRequestError = (req, res, err, status = 404) => {
@@ -18,7 +18,7 @@ const catchRequestError = (req, res, err, status = 404) => {
         message = { message: err.errors.message };
         if (err.errors.age) {
             status = 400;
-            message = { message: err.errors.age.message };
+            message = { message: `${err.errors.age.message}` };
         }
 
     }
@@ -88,4 +88,6 @@ module.exports = {
     user_create_post,
     user_delete,
     user_update,
+    sendRequestResponse,
+    catchRequestError
 }

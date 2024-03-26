@@ -6,14 +6,16 @@ const sendRequestResponse = (req, res, result, status = 200) => {
         result = { message: `Post id "${req.params.id.toString()}" not found` };
         status = 404;
     }
-    res.status(status).json(result);
+    res.status(status).send(result);
 }
 
-const catchRequestError = (req, res, err) => {
+const catchRequestError = (req, res, err, status = 404) => {
     console.log(err);
+    let response = { error: {} };
     if (err.kind == 'ObjectId') {
-        res.status(404).send({ message: `Post id "${req.params.id.toString()}" not valid` });
+        response.error = { message: `Post id "${req.params.id.toString()}" not found` };
     }
+    res.status(status).send(response);
 }
 
 const post_index = async (req, res) => {
@@ -92,4 +94,6 @@ module.exports = {
     post_create_post,
     post_delete,
     post_update,
+    sendRequestResponse,
+    catchRequestError
 }

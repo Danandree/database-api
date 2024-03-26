@@ -1,4 +1,4 @@
-const { default: mongoose, Mongoose } = require('mongoose');
+const mongoose = require('mongoose');
 const Interaction = require('../models/interaction');
 const User = require('../models/user');
 const Post = require('../models/post');
@@ -8,18 +8,22 @@ const sendRequestResponse = (req, res, result, status = 200) => {
         result = { message: `Interaction id "${req.params.id.toString()}" not found` };
         status = 404;
     }
-    res.status(status).json(result);
+    res.status(status).send(result);
 }
 
 const catchRequestError = (req, res, err, status = 404) => {
     console.log(err);
+    console.log(err.path,"path");
     let response = { error: {} };
     if (err.kind == 'ObjectId') {
         status = 400
-        if(err.path == "_id") {
+        if (err.type == 'Post') {
+            response.error = { message: `Interaction id "${err.value}" not found` };
+        }
+        if (err.path == "_id") {
             response.error = { message: `Interaction id "${req.params.id.toString()}" not valid` };
         }
-        if(err.type == 'Post' || err.path == 'post_id' || err.path == 'user_id') {
+        if (err.path == 'post_id' || err.path == 'user_id') {
             response.error = { message: `${err.path} "${err.value}" not found` };
         }
     }
@@ -29,6 +33,7 @@ const catchRequestError = (req, res, err, status = 404) => {
             response.error = { message: err.errors.type.properties.message };
         }
     }
+    console.log(response,"response");
     res.status(status).send(response);
 }
 
@@ -38,12 +43,12 @@ const interaction_index = async (req, res) => {
         post_id = new mongoose.Types.ObjectId(post_id);
         const post = await Post.findById(post_id);
         if (!post) {
-            return catchRequestError(req, res, {kind: 'ObjectId', type: 'Post'});
+            return catchRequestError(req, res, { kind: 'ObjectId', type: 'Post' });
         }
 
     } catch (err) {
-        return catchRequestError(req, res, {kind: 'ObjectId', type: 'Post'});
-        
+        return catchRequestError(req, res, { kind: 'ObjectId', type: 'Post' });
+
     }
     let page = 0;
     let per_page = 100;
@@ -125,4 +130,6 @@ module.exports = {
     interaction_index,
     interaction_delete,
     interaction_update,
+    sendRequestResponse,
+    catchRequestError
 }
