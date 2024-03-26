@@ -28,11 +28,13 @@ app.use((req, res) => {
     res.status(404).send({ message: `URL "${req.url}" not found` });
 });
 
-try {
-    const connection = mongoose.connect(dbURI);
-    console.log('connected to db');
-    app.listen(PORT, IPADDRESS, () => console.log(`server running on port ${PORT}`));
-}
-catch (err) {
-    console.log(err);
-}
+mongoose.connect(dbURI)
+    .then(() => {
+        console.log('connected to db');
+        app.listen(PORT, IPADDRESS, () => {
+            console.log(`server running on port ${PORT}`);
+        });
+    })
+    .catch((err) => {
+        console.log(err);
+    });
