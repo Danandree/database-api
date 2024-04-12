@@ -5,7 +5,7 @@ API JSON RESTful che permettono di contattare un database per creare, visualizza
 > [!NOTE]
 > L'applicazione si appoggia ad un database MongoDB
 
-## Instllazione e test
+## Installazione e test
 Per testare l'applicazione è necessario che sul vostro sistema sia intallato nodeJs, il relativo package manager (NPM) ed abbiate accesso ad un database MongoDb.<br>
 Una volta scaricato il repository intallare le dipendenza con il comando npm install e creare un file .env con i dati dell'applicazione.<br>
 
